@@ -203,10 +203,6 @@ src/
 | `skipense-lime`    | `#C7F269` — accent (used sparingly)  |
 | `skipense-ink`     | `#112320` — near-black text          |
 | `skipense-mist`    | `#ECECEC` — soft backgrounds         |
-| Font               | Manrope 400 / 500 / 700              |
+| `Font`             | Manrope 400 / 500 / 700              |
 | Shadow `soft`      | `0 2px 8px rgba(0,0,0,0.04)`         |
 | Shadow `card`      | `0 4px 20px rgba(17,35,32,0.06)`     |
-
----
-
-*Built by your junior developer, guided by a 30-year veteran.*
