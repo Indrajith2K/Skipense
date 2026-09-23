@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Star, Plus, Minus, ChevronRight, TrendingUp, CreditCard, Zap } from 'lucide-react'
+import { Star, Plus, Minus, ChevronRight, TrendingUp, CreditCard, Zap, Clock } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
@@ -216,9 +216,14 @@ function FeatureSuite() {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white rounded-3xl shadow-card p-8 hover:scale-[1.02] transition-transform duration-200">
-            <div className="w-12 h-12 bg-skipense-mist rounded-2xl flex items-center justify-center mb-6">
-              <CreditCard size={22} className="text-skipense-dark" />
+          <div className="bg-white rounded-3xl shadow-card p-8 hover:scale-[1.02] transition-transform duration-200 relative">
+            <div className="flex items-center justify-between mb-6">
+              <div className="w-12 h-12 bg-skipense-mist rounded-2xl flex items-center justify-center">
+                <CreditCard size={22} className="text-skipense-dark" />
+              </div>
+              <span className="bg-amber-100/80 text-amber-800 text-[11px] font-bold tracking-wide uppercase px-3 py-1 rounded-full border border-amber-200/60">
+                Coming Soon
+              </span>
             </div>
             <h3 className="font-bold text-skipense-ink text-xl mb-3">Skipense Card</h3>
             <p className="text-slate-500 text-sm leading-relaxed">
@@ -235,9 +240,14 @@ function FeatureSuite() {
           </div>
 
           {/* Card 3 — dark */}
-          <div className="bg-skipense-dark rounded-3xl p-8 hover:scale-[1.02] transition-transform duration-200 flex flex-col">
-            <div className="w-12 h-12 bg-skipense-lime/20 rounded-2xl flex items-center justify-center mb-6">
-              <Zap size={22} className="text-skipense-lime" />
+          <div className="bg-skipense-dark rounded-3xl p-8 hover:scale-[1.02] transition-transform duration-200 flex flex-col relative">
+            <div className="flex items-center justify-between mb-6">
+              <div className="w-12 h-12 bg-skipense-lime/20 rounded-2xl flex items-center justify-center">
+                <Zap size={22} className="text-skipense-lime" />
+              </div>
+              <span className="bg-skipense-lime/20 text-skipense-lime text-[11px] font-bold tracking-wide uppercase px-3 py-1 rounded-full border border-skipense-lime/30">
+                Coming Soon
+              </span>
             </div>
             <h3 className="font-bold text-white text-xl mb-3">Instant Virtual Card Access</h3>
             <p className="text-skipense-mist/70 text-sm leading-relaxed flex-1">
@@ -251,12 +261,10 @@ function FeatureSuite() {
                 </div>
               ))}
             </div>
-            <Link
-              to="/signup"
-              className="inline-flex items-center gap-2 bg-skipense-lime text-skipense-ink font-bold text-sm px-5 py-3 rounded-full hover:scale-[1.03] transition-transform duration-200 self-start"
-            >
-              Get started <ChevronRight size={14} />
-            </Link>
+            <div className="inline-flex items-center gap-2 bg-white/10 text-skipense-mist/80 font-bold text-sm px-5 py-3 rounded-full self-start border border-white/10">
+              <Clock size={15} className="text-skipense-lime" />
+              Coming Soon
+            </div>
           </div>
         </div>
       </div>
