@@ -5,6 +5,15 @@ Track expenses, visualise spending by category, and manage your team's finances 
 
 ---
 
+## 🔑 Quick Demo Credentials
+
+For testing and reviewing the live demo application, feel free to use these credentials:
+
+- **Email:** `skittex@gmail.com`
+- **Password:** `testing123`
+
+---
+
 ## Stack
 
 | Layer      | Technology                         |
