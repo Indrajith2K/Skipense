@@ -16,7 +16,7 @@ import EmptyState from './EmptyState'
  * In production you'd swap this for a modal — but confirm() is zero-JS-overhead,
  * accessible (browser handles focus management), and unambiguous.
  */
-export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFilters, limit = 0 }) {
+export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFilters, limit = 0, categoryColors = {} }) {
   const SKELETON_COUNT = limit > 0 ? limit : 5
 
   const displayedExpenses = limit > 0 ? expenses.slice(0, limit) : expenses
@@ -82,7 +82,7 @@ export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFi
               <td className="px-4 py-4">
                 <span
                   className="text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap"
-                  style={getCategoryStyle(exp.category)}
+                  style={getCategoryStyle(exp.category, categoryColors)}
                 >
                   {exp.category}
                 </span>
@@ -140,7 +140,7 @@ export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFi
             <span className="text-xs text-slate-400">{formatDate(exp.date)}</span>
             <span
               className="text-xs font-bold px-3 py-1 rounded-full"
-              style={getCategoryStyle(exp.category)}
+              style={getCategoryStyle(exp.category, categoryColors)}
             >
               {exp.category}
             </span>

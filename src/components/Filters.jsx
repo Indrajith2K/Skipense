@@ -1,17 +1,11 @@
 import { useRef, useCallback } from 'react'
 import { Filter, RotateCcw } from 'lucide-react'
-import { CATEGORIES } from '../lib/helpers'
+import { CATEGORIES as DEFAULT_CATEGORIES } from '../lib/helpers'
 
 /**
  * Filters — category dropdown + date range.
- *
- * Date inputs are debounced (300ms) to avoid firing a useMemo recalc
- * on every keystroke while the user is typing a date manually.
- *
- * We avoid useState for the debounce and instead use useRef + setTimeout.
- * This is intentional: we don't want the debounce timer to cause a re-render.
  */
-export default function Filters({ filters, setFilters, total, shown }) {
+export default function Filters({ filters, setFilters, total, shown, categories = DEFAULT_CATEGORIES }) {
   const debounceRef = useRef(null)
 
   const handleCategory = useCallback((e) => {
@@ -54,7 +48,7 @@ export default function Filters({ filters, setFilters, total, shown }) {
             className={inputClass}
           >
             <option value="">All categories</option>
-            {CATEGORIES.map(c => (
+            {categories.map(c => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useExpenses } from '../hooks/useExpenses'
 import { useSettings } from '../hooks/useSettings'
+import { useCategories } from '../hooks/useCategories'
 import TopBar from '../components/TopBar'
 import ExpenseForm from '../components/ExpenseForm'
 import Filters from '../components/Filters'
@@ -13,10 +14,6 @@ import Charts from '../components/Charts'
 
 /**
  * Dashboard — the main protected page.
- *
- * State philosophy: Dashboard owns "edit mode" state only.
- * All expense data lives in useExpenses. All auth state lives in useAuth.
- * This keeps Dashboard as a pure orchestrator — it wires hooks and components.
  */
 export default function Dashboard() {
   const { user, signOut }           = useAuth()
@@ -36,6 +33,7 @@ export default function Dashboard() {
   } = useExpenses(user)
   
   const { settings, loading: settingsLoading, updateMonthlyLimit } = useSettings(user)
+  const { categories, categoryColors, addCategory } = useCategories(user)
 
   const [editTarget,  setEditTarget]  = useState(null) // the expense being edited, or null
   const [submitting,  setSubmitting]  = useState(false)
@@ -102,6 +100,8 @@ export default function Dashboard() {
               onCancel={handleCancelEdit}
               submitting={submitting}
               error={formError}
+              categories={categories}
+              onAddCategory={addCategory}
             />
             <MonthlyTotalCard
               currentMonthTotal={currentMonthTotal}
@@ -121,12 +121,13 @@ export default function Dashboard() {
               setFilters={setFilters}
               total={expenses.length}
               shown={filtered.length}
+              categories={categories}
             />
           </div>
         </div>
 
         {/* Row 2: Charts */}
-        <Charts categoryTotals={categoryTotals} />
+        <Charts categoryTotals={categoryTotals} categoryColors={categoryColors} />
 
         {/* Row 3: Expense list */}
         <section aria-label="Expense list">
@@ -143,6 +144,7 @@ export default function Dashboard() {
             onDelete={deleteExpense}
             hasFilters={hasFilters}
             limit={5}
+            categoryColors={categoryColors}
           />
         </section>
       </main>

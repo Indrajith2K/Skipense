@@ -17,10 +17,10 @@ import { CATEGORY_COLORS } from '../lib/helpers'
  * We use height={280}. Do not use percentage heights — Recharts will infinitely
  * loop trying to measure a container that's also measured by Recharts.
  */
-export default function Charts({ categoryTotals }) {
+export default function Charts({ categoryTotals, categoryColors = {} }) {
   const colors = useMemo(
-    () => categoryTotals.map(entry => CATEGORY_COLORS[entry.name] ?? '#ECECEC'),
-    [categoryTotals]
+    () => categoryTotals.map(entry => categoryColors[entry.name] ?? CATEGORY_COLORS[entry.name] ?? '#3B82F6'),
+    [categoryTotals, categoryColors]
   )
 
   if (!categoryTotals.length) {

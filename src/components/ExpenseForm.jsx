@@ -1,32 +1,39 @@
 import { useState, useEffect } from 'react'
-import { PlusCircle, Save, X } from 'lucide-react'
-import { CATEGORIES } from '../lib/helpers'
+import { PlusCircle, Save, X, Plus, Check } from 'lucide-react'
+import { CATEGORIES as DEFAULT_CATEGORIES } from '../lib/helpers'
 
 /**
  * ExpenseForm handles both ADD and EDIT modes.
- *
- * Design decision: single form for both modes.
- * When `editTarget` prop is provided, the form pre-populates
- * and the submit button says "Update Expense".
- * When `editTarget` is null, it's a fresh add form.
- *
- * This avoids duplicating form logic in two separate components.
- *
- * Props:
- *   onSubmit(fields)  → called with { amount, date, category, description }
- *   editTarget        → expense object to edit, or null
- *   onCancel()        → cancel edit mode
- *   submitting        → boolean (parent controls this to show loading state)
- *   error             → string | null (inline error from parent)
  */
-export default function ExpenseForm({ onSubmit, editTarget, onCancel, submitting, error }) {
+export default function ExpenseForm({
+  onSubmit,
+  editTarget,
+  onCancel,
+  submitting,
+  error,
+  categories = DEFAULT_CATEGORIES,
+  onAddCategory,
+}) {
   const isEditing = Boolean(editTarget)
 
   const [amount,      setAmount]      = useState('')
   const [date,        setDate]        = useState(today())
-  const [category,    setCategory]    = useState(CATEGORIES[0])
+  const [category,    setCategory]    = useState(categories[0] || 'Other')
   const [description, setDescription] = useState('')
   const [fieldErrors, setFieldErrors] = useState({})
+
+  // Custom Category creation state
+  const [isAddingCategory, setIsAddingCategory] = useState(false)
+  const [newCatName, setNewCatName] = useState('')
+  const [catCreating, setCatCreating] = useState(false)
+  const [catError, setCatError] = useState(null)
+
+  // Sync category selection if categories array changes
+  useEffect(() => {
+    if (!category && categories.length > 0) {
+      setCategory(categories[0])
+    }
+  }, [categories, category])
 
   // When editTarget changes (entering edit mode), populate fields
   useEffect(() => {
@@ -47,9 +54,37 @@ export default function ExpenseForm({ onSubmit, editTarget, onCancel, submitting
   function resetForm() {
     setAmount('')
     setDate(today())
-    setCategory(CATEGORIES[0])
+    setCategory(categories[0] || 'Other')
     setDescription('')
     setFieldErrors({})
+    setIsAddingCategory(false)
+    setNewCatName('')
+    setCatError(null)
+  }
+
+  const handleCreateCategorySubmit = async (e) => {
+    e.preventDefault()
+    if (!newCatName.trim()) return
+    setCatCreating(true)
+    setCatError(null)
+
+    if (onAddCategory) {
+      const res = await onAddCategory(newCatName.trim())
+      if (res.error) {
+        setCatError(res.error)
+      } else {
+        const addedName = res.data?.name || newCatName.trim()
+        setCategory(addedName)
+        setNewCatName('')
+        setIsAddingCategory(false)
+      }
+    } else {
+      // Fallback
+      setCategory(newCatName.trim())
+      setNewCatName('')
+      setIsAddingCategory(false)
+    }
+    setCatCreating(false)
   }
 
   function validate() {
@@ -132,17 +167,70 @@ export default function ExpenseForm({ onSubmit, editTarget, onCancel, submitting
 
         {/* Category */}
         <div>
-          <label htmlFor="expense-category" className={labelClass}>Category</label>
-          <select
-            id="expense-category"
-            value={category}
-            onChange={e => setCategory(e.target.value)}
-            className={inputClass}
-          >
-            {CATEGORIES.map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+          <div className="flex items-center justify-between mb-1.5">
+            <label htmlFor="expense-category" className="text-xs uppercase tracking-widest text-slate-500 font-medium">Category</label>
+            {!isAddingCategory && (
+              <button
+                type="button"
+                onClick={() => setIsAddingCategory(true)}
+                className="text-xs font-bold text-skipense-dark hover:underline flex items-center gap-1"
+              >
+                <Plus size={12} />
+                + Add Custom Category
+              </button>
+            )}
+          </div>
+
+          {isAddingCategory ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={newCatName}
+                  onChange={e => setNewCatName(e.target.value)}
+                  placeholder="e.g. Subscriptions, Pet Care"
+                  className={inputClass}
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={handleCreateCategorySubmit}
+                  disabled={catCreating || !newCatName.trim()}
+                  className="bg-skipense-dark text-skipense-lime p-3 rounded-xl hover:scale-105 transition disabled:opacity-50 shrink-0"
+                  title="Save Category to Database"
+                >
+                  <Check size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setIsAddingCategory(false); setCatError(null) }}
+                  className="bg-skipense-mist text-slate-500 p-3 rounded-xl hover:bg-slate-200 transition shrink-0"
+                  title="Cancel"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              {catError && <p className="text-red-400 text-xs">{catError}</p>}
+            </div>
+          ) : (
+            <select
+              id="expense-category"
+              value={category}
+              onChange={e => {
+                if (e.target.value === '__ADD_NEW__') {
+                  setIsAddingCategory(true)
+                } else {
+                  setCategory(e.target.value)
+                }
+              }}
+              className={inputClass}
+            >
+              {categories.map(c => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+              <option value="__ADD_NEW__">+ Add Custom Category...</option>
+            </select>
+          )}
         </div>
 
         {/* Description */}

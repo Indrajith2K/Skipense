@@ -10,7 +10,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { useExpenses } from '../hooks/useExpenses'
-import { formatCurrency, formatDate, CATEGORY_COLORS } from '../lib/helpers'
+import { useCategories } from '../hooks/useCategories'
+import { formatCurrency, formatDate, getCategoryStyle, CATEGORY_COLORS } from '../lib/helpers'
 import Logo from '../components/Logo'
 
 /**
@@ -20,6 +21,7 @@ export default function Analytics() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
   const { expenses, loading } = useExpenses(user)
+  const { categoryColors } = useCategories(user)
   
   // Period filter state: 'week' | 'month' | 'year' | 'all'
   const [period, setPeriod] = useState('month')
@@ -116,8 +118,8 @@ export default function Analytics() {
   }, [filteredExpenses, period])
 
   const colors = useMemo(() => {
-    return categoryTotals.map(entry => CATEGORY_COLORS[entry.name] ?? '#ECECEC')
-  }, [categoryTotals])
+    return categoryTotals.map(entry => categoryColors[entry.name] ?? CATEGORY_COLORS[entry.name] ?? '#3B82F6')
+  }, [categoryTotals, categoryColors])
 
   const formatRupee = (value) =>
     new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value)
@@ -373,7 +375,7 @@ export default function Analytics() {
                     <tr key={exp.id} className="hover:bg-slate-50/60 transition">
                       <td className="py-3 px-2 text-slate-500 font-medium">{formatDate(exp.date)}</td>
                       <td className="py-3 px-2">
-                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold" style={{ backgroundColor: CATEGORY_COLORS[exp.category] ?? '#ECECEC', color: ['#C7F269', '#8BC34A', '#ECECEC'].includes(CATEGORY_COLORS[exp.category]) ? '#112320' : '#ffffff' }}>
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold" style={getCategoryStyle(exp.category, categoryColors)}>
                           {exp.category}
                         </span>
                       </td>

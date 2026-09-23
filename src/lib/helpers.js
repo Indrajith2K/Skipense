@@ -45,12 +45,12 @@ export const CATEGORY_COLORS = {
 
 /**
  * Returns a Tailwind-compatible background + text class pair for a category pill.
- * We use inline style for bg (from CATEGORY_COLORS) and derive text contrast manually.
+ * Supports standard categories and custom user-created categories.
  */
-export function getCategoryStyle(category) {
-  const bg = CATEGORY_COLORS[category] ?? CATEGORY_COLORS.Other
-  // Lime and Mist are light — use dark ink text. Darks use white.
-  const lightBgs = ['#C7F269', '#8BC34A', '#ECECEC']
+export function getCategoryStyle(category, customColorMap = {}) {
+  const bg = customColorMap[category] ?? CATEGORY_COLORS[category] ?? '#3B82F6'
+  // Light background check for readable text contrast
+  const lightBgs = ['#C7F269', '#8BC34A', '#ECECEC', '#F59E0B']
   const textColor = lightBgs.includes(bg) ? '#112320' : '#ffffff'
   return { backgroundColor: bg, color: textColor }
 }
