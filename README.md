@@ -3,12 +3,15 @@
 A production-quality expense tracker built with **React (Vite) + Tailwind CSS + Supabase**.  
 Track expenses, visualise spending by category, and manage your team's finances from a clean dashboard.
 
+🚀 **Live Demo**: [https://skipense.skittex.in/](https://skipense.skittex.in/)
+
 ---
 
 ## 🔑 Quick Demo Credentials
 
-For testing and reviewing the live demo application, feel free to use these credentials:
+For testing and reviewing the live demo application, feel free to use these credentials on [skipense.skittex.in](https://skipense.skittex.in/):
 
+- **Live URL:** [https://skipense.skittex.in/](https://skipense.skittex.in/)
 - **Email:** `skittex@gmail.com`
 - **Password:** `testing123`
 
