@@ -12,6 +12,7 @@ const Landing       = React.lazy(() => import('./pages/Landing'))
 const Login         = React.lazy(() => import('./pages/Login'))
 const Signup        = React.lazy(() => import('./pages/Signup'))
 const Dashboard     = React.lazy(() => import('./pages/Dashboard'))
+const AllExpenses   = React.lazy(() => import('./pages/AllExpenses'))
 const About         = React.lazy(() => import('./pages/About'))
 const Blog          = React.lazy(() => import('./pages/Blog'))
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'))
@@ -81,6 +82,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/app/expenses"
+            element={
+              <ProtectedRoute>
+                <AllExpenses />
               </ProtectedRoute>
             }
           />

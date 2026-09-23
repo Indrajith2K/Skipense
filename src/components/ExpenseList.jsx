@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Pencil, Trash2 } from 'lucide-react'
 import { formatCurrency, formatDate, getCategoryStyle } from '../lib/helpers'
 import { SkeletonRow, SkeletonCard } from './Skeleton'
@@ -15,8 +16,11 @@ import EmptyState from './EmptyState'
  * In production you'd swap this for a modal — but confirm() is zero-JS-overhead,
  * accessible (browser handles focus management), and unambiguous.
  */
-export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFilters }) {
-  const SKELETON_COUNT = 5
+export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFilters, limit = 0 }) {
+  const SKELETON_COUNT = limit > 0 ? limit : 5
+
+  const displayedExpenses = limit > 0 ? expenses.slice(0, limit) : expenses
+  const hasMore = limit > 0 && expenses.length > limit
 
   // ── Loading state ────────────────────────────────────────────────────────
   if (loading) {
@@ -64,7 +68,7 @@ export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFi
           </tr>
         </thead>
         <tbody>
-          {expenses.map((exp, idx) => (
+          {displayedExpenses.map((exp, idx) => (
             <tr
               key={exp.id}
               className={`border-b border-skipense-mist last:border-0 hover:bg-skipense-mist/40 transition-colors ${
@@ -125,7 +129,7 @@ export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFi
   // ── Mobile cards ─────────────────────────────────────────────────────────
   const MobileCards = (
     <div className="md:hidden p-4 space-y-3">
-      {expenses.map((exp, idx) => (
+      {displayedExpenses.map((exp, idx) => (
         <div
           key={exp.id}
           className={`bg-skipense-mist/50 rounded-2xl p-4 shadow-soft ${
@@ -182,6 +186,13 @@ export default function ExpenseList({ expenses, loading, onEdit, onDelete, hasFi
     <div className="bg-white rounded-2xl shadow-card overflow-hidden">
       {DesktopTable}
       {MobileCards}
+      {hasMore && (
+        <div className="p-4 border-t border-skipense-mist bg-skipense-mist/20 text-center">
+          <Link to="/app/expenses" className="text-sm font-bold text-skipense-dark hover:text-skipense-ink hover:underline transition">
+            View all {expenses.length} expenses →
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

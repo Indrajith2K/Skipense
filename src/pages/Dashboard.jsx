@@ -2,9 +2,12 @@ import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useExpenses } from '../hooks/useExpenses'
+import { useSettings } from '../hooks/useSettings'
 import TopBar from '../components/TopBar'
 import ExpenseForm from '../components/ExpenseForm'
 import Filters from '../components/Filters'
+import BudgetCard from '../components/BudgetCard'
+import MonthlyTotalCard from '../components/MonthlyTotalCard'
 import ExpenseList from '../components/ExpenseList'
 import Charts from '../components/Charts'
 
@@ -23,6 +26,7 @@ export default function Dashboard() {
     filtered,
     categoryTotals,
     grandTotal,
+    currentMonthTotal,
     loading,
     filters,
     setFilters,
@@ -30,6 +34,8 @@ export default function Dashboard() {
     updateExpense,
     deleteExpense,
   } = useExpenses(user)
+  
+  const { settings, loading: settingsLoading, updateMonthlyLimit } = useSettings(user)
 
   const [editTarget,  setEditTarget]  = useState(null) // the expense being edited, or null
   const [submitting,  setSubmitting]  = useState(false)
@@ -87,21 +93,36 @@ export default function Dashboard() {
         {/* Row 1: Form + Filters */}
         <div
           id="expense-form-card"
-          className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-start"
+          className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6 items-stretch"
         >
-          <ExpenseForm
-            onSubmit={handleFormSubmit}
-            editTarget={editTarget}
-            onCancel={handleCancelEdit}
-            submitting={submitting}
-            error={formError}
-          />
-          <Filters
-            filters={filters}
-            setFilters={setFilters}
-            total={expenses.length}
-            shown={filtered.length}
-          />
+          <div className="flex flex-col gap-6 h-full justify-between">
+            <ExpenseForm
+              onSubmit={handleFormSubmit}
+              editTarget={editTarget}
+              onCancel={handleCancelEdit}
+              submitting={submitting}
+              error={formError}
+            />
+            <MonthlyTotalCard
+              currentMonthTotal={currentMonthTotal}
+              grandTotal={grandTotal}
+              expenseCount={expenses.length}
+            />
+          </div>
+          <div className="flex flex-col gap-6 h-full justify-between">
+            <BudgetCard
+              settings={settings}
+              loading={settingsLoading}
+              currentMonthTotal={currentMonthTotal}
+              updateMonthlyLimit={updateMonthlyLimit}
+            />
+            <Filters
+              filters={filters}
+              setFilters={setFilters}
+              total={expenses.length}
+              shown={filtered.length}
+            />
+          </div>
         </div>
 
         {/* Row 2: Charts */}
@@ -121,6 +142,7 @@ export default function Dashboard() {
             onEdit={handleEdit}
             onDelete={deleteExpense}
             hasFilters={hasFilters}
+            limit={5}
           />
         </section>
       </main>

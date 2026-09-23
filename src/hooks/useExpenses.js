@@ -219,11 +219,34 @@ export function useExpenses(user) {
     [expenses]
   )
 
+  /**
+   * Current month total — sum of expenses in the current calendar month.
+   * Parses YYYY-MM-DD directly to prevent UTC midnight timezone shifts.
+   */
+  const currentMonthTotal = useMemo(() => {
+    const now = new Date()
+    const currentMonth = now.getMonth() + 1 // 1..12
+    const currentYear = now.getFullYear()
+    
+    return expenses.reduce((sum, e) => {
+      if (!e.date) return sum
+      const parts = e.date.split('-')
+      if (parts.length < 2) return sum
+      const year = parseInt(parts[0], 10)
+      const month = parseInt(parts[1], 10)
+      if (month === currentMonth && year === currentYear) {
+        return sum + Number(e.amount)
+      }
+      return sum
+    }, 0)
+  }, [expenses])
+
   return {
     expenses,
     filtered,
     categoryTotals,
     grandTotal,
+    currentMonthTotal,
     loading,
     error,
     filters,
