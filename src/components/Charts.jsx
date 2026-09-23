@@ -1,4 +1,6 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowUpRight } from 'lucide-react'
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -51,7 +53,17 @@ export default function Charts({ categoryTotals }) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Pie chart */}
       <div className="bg-white rounded-2xl shadow-card p-6">
-        <h3 className="font-bold text-skipense-ink text-base mb-4">Breakdown by Category</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-skipense-ink text-base">Breakdown by Category</h3>
+          <Link
+            to="/app/analytics"
+            className="flex items-center gap-1 text-xs font-bold text-skipense-dark bg-skipense-mist hover:bg-slate-200 px-3 py-1.5 rounded-full transition duration-200"
+            title="Filter by Week, Month, or Year"
+          >
+            <span>Week / Month / Year</span>
+            <ArrowUpRight size={14} />
+          </Link>
+        </div>
         <ResponsiveContainer width="100%" height={240}>
           <PieChart>
             <Pie
@@ -86,7 +98,17 @@ export default function Charts({ categoryTotals }) {
 
       {/* Bar chart */}
       <div className="bg-white rounded-2xl shadow-card p-6">
-        <h3 className="font-bold text-skipense-ink text-base mb-4">Total by Category</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-skipense-ink text-base">Total by Category</h3>
+          <Link
+            to="/app/analytics"
+            className="flex items-center gap-1 text-xs font-bold text-skipense-dark bg-skipense-mist hover:bg-slate-200 px-3 py-1.5 rounded-full transition duration-200"
+            title="Filter by Week, Month, or Year"
+          >
+            <span>Filter Reports</span>
+            <ArrowUpRight size={14} />
+          </Link>
+        </div>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={categoryTotals} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#ECECEC" vertical={false} />

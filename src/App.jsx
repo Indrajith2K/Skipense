@@ -13,6 +13,7 @@ const Login         = React.lazy(() => import('./pages/Login'))
 const Signup        = React.lazy(() => import('./pages/Signup'))
 const Dashboard     = React.lazy(() => import('./pages/Dashboard'))
 const AllExpenses   = React.lazy(() => import('./pages/AllExpenses'))
+const Analytics     = React.lazy(() => import('./pages/Analytics'))
 const About         = React.lazy(() => import('./pages/About'))
 const Blog          = React.lazy(() => import('./pages/Blog'))
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'))
@@ -90,6 +91,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <AllExpenses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/app/analytics"
+            element={
+              <ProtectedRoute>
+                <Analytics />
               </ProtectedRoute>
             }
           />
