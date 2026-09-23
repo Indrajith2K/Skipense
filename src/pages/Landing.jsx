@@ -73,7 +73,15 @@ function Hero() {
               </Link>
             </form>
 
-            <p className="text-xs text-slate-400 mt-4">No credit card required. Free forever for small teams.</p>
+            <div className="mt-4 flex flex-wrap items-center gap-4">
+              <Link
+                to="/signup"
+                className="inline-flex items-center justify-center gap-2 bg-skipense-dark text-skipense-lime font-bold text-sm px-6 py-3 rounded-full hover:scale-[1.03] transition-transform duration-200 shadow-md"
+              >
+                Create Account <ChevronRight size={16} />
+              </Link>
+              <span className="text-xs text-slate-400">No credit card required. Free forever.</span>
+            </div>
           </div>
 
           {/* Right: dashboard mockup */}
